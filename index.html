@@ -3,207 +3,327 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Paletas — Galería</title>
+  <title>Paletas — Archivo</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
   <style>
     :root{
-      --bg: #f6f7f8;
-      --card: #ffffff;
-      --muted: #6b7280;
-      --accent: #111827;
-      --glass: rgba(255,255,255,0.6);
-      --radius: 12px;
-      --shadow: 0 6px 18px rgba(17,24,39,0.06);
-      --accent-2: #374151;
-      font-family: Inter, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      --paper: #d1cdb7;
+      --paper-2: #dad6c1;
+      --paper-3: #c4bfa8;
+      --ink: #454138;
+      --ink-soft: #7a7564;
+      --line: rgba(69,65,56,0.38);
+      --line-soft: rgba(69,65,56,0.18);
+      --sans: "Jost", "Helvetica Neue", Arial, sans-serif;
+      --mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
     }
 
     *{box-sizing:border-box}
-    html,body{height:100%}
+    html,body{min-height:100%}
     body{
       margin:0;
-      background: linear-gradient(180deg,var(--bg),#eef2f6 60%);
-      color:var(--accent-2);
+      background:var(--paper);
+      color:var(--ink);
+      font-family:var(--sans);
+      font-weight:400;
       -webkit-font-smoothing:antialiased;
-      -moz-osx-font-smoothing:grayscale;
-      padding:48px 20px;
+      padding:56px 32px 96px;
       display:flex;
-      align-items:flex-start;
       justify-content:center;
     }
 
-    .wrap{
-      width:100%;
-      max-width:1120px;
+    /* textura: líneas de escaneo + viñeta */
+    body::before{
+      content:"";
+      position:fixed; inset:0;
+      pointer-events:none;
+      z-index:50;
+      background:
+        repeating-linear-gradient(0deg, rgba(69,65,56,0.045) 0 1px, transparent 1px 3px),
+        radial-gradient(ellipse at center, transparent 55%, rgba(69,65,56,0.16) 100%);
     }
 
+    ::selection{background:var(--ink); color:var(--paper)}
+
+    .wrap{ width:100%; max-width:1120px; }
+
+    /* ---------- Encabezado ---------- */
     header{
       display:flex;
-      align-items:baseline;
+      align-items:flex-end;
       justify-content:space-between;
-      gap:16px;
-      margin-bottom:24px;
+      gap:24px;
+      padding-bottom:18px;
+      border-bottom:1px solid var(--line);
+      position:relative;
+      margin-bottom:36px;
     }
-
+    header::after{ /* marca en el borde inferior */
+      content:"";
+      position:absolute; left:0; bottom:-4px;
+      width:84px; height:7px;
+      background:var(--ink);
+    }
+    .eyebrow{
+      font-family:var(--mono);
+      font-size:11px;
+      letter-spacing:0.28em;
+      text-transform:uppercase;
+      color:var(--ink-soft);
+      margin-bottom:10px;
+    }
     .title{
-      font-size:20px;
-      font-weight:600;
-      color:var(--accent);
-      letter-spacing: -0.2px;
+      font-size:34px;
+      font-weight:300;
+      letter-spacing:0.34em;
+      text-transform:uppercase;
+      color:var(--ink);
+      line-height:1;
+    }
+    .title i{
+      display:inline-block;
+      width:11px; height:11px;
+      background:var(--ink);
+      transform:rotate(45deg);
+      margin-right:18px;
+      vertical-align:middle;
+      position:relative; top:-3px;
     }
     .subtitle{
-      color:var(--muted);
-      font-size:13px;
-      margin-top:6px;
+      font-family:var(--mono);
+      font-size:12px;
+      letter-spacing:0.12em;
+      color:var(--ink-soft);
+      margin-top:14px;
+      text-transform:uppercase;
     }
 
-    .controls{
-      display:flex;
-      gap:8px;
-      align-items:center;
-    }
     .btn{
+      font-family:var(--sans);
+      font-size:12px;
+      font-weight:500;
+      letter-spacing:0.24em;
+      text-transform:uppercase;
       background:transparent;
-      border:1px solid rgba(17,24,39,0.06);
-      padding:8px 12px;
-      border-radius:10px;
-      font-size:13px;
-      color:var(--accent-2);
+      color:var(--ink);
+      border:1px solid var(--ink);
+      padding:10px 16px 10px 14px;
       cursor:pointer;
-      transition:all .16s ease;
-      backdrop-filter: blur(6px);
+      transition:background .18s ease, color .18s ease;
     }
-    .btn:hover{transform:translateY(-2px); box-shadow:var(--shadow)}
-    .btn.ghost{background:var(--glass)}
+    .btn::before{ content:"▸"; margin-right:10px; font-size:10px; }
+    .btn:hover{ background:var(--ink); color:var(--paper); }
 
-    main{
-      background:transparent;
-    }
-
+    /* ---------- Grilla ---------- */
     .grid{
       display:grid;
-      grid-template-columns:repeat(auto-fill,minmax(220px,1fr));
-      gap:18px;
+      grid-template-columns:repeat(auto-fill,minmax(240px,1fr));
+      gap:24px;
     }
 
     .card{
-      background:var(--card);
-      border-radius:var(--radius);
-      overflow:hidden;
-      box-shadow:var(--shadow);
-      border:1px solid rgba(16,24,40,0.04);
+      position:relative;
+      background:var(--paper-2);
+      border:1px solid var(--line);
+      padding:10px;
       display:flex;
       flex-direction:column;
-      transition:transform .14s ease, box-shadow .14s ease;
+      gap:12px;
+      transition:background .2s ease, color .2s ease, border-color .2s ease;
+      opacity:0;
+      animation:rise .5s ease forwards;
     }
-    .card:hover{transform:translateY(-6px)}
+    .card::after{ /* esquina cortada */
+      content:"";
+      position:absolute; right:-1px; bottom:-1px;
+      width:0; height:0;
+      border-style:solid;
+      border-width:0 0 14px 14px;
+      border-color:transparent transparent var(--ink) transparent;
+    }
+    .card:hover{
+      background:var(--ink);
+      color:var(--paper);
+      border-color:var(--ink);
+    }
+    .card:hover::after{ border-bottom-color:var(--paper); }
+    .card:hover .idx,
+    .card:hover .info{ color:var(--paper-3); }
+
+    @keyframes rise{
+      from{ opacity:0; transform:translateY(10px); }
+      to{ opacity:1; transform:none; }
+    }
 
     .swatches{
       display:flex;
-      gap:0;
-      height:96px;
-      min-height:72px;
+      height:104px;
+      border:1px solid var(--line);
     }
     .swatch{
       flex:1 1 0;
       min-width:0;
       display:flex;
       align-items:flex-end;
-      justify-content:center;
-      padding:8px;
-      color:rgba(255,255,255,0.92);
-      font-weight:600;
-      font-size:12px;
-      letter-spacing:0.6px;
-      text-shadow:0 2px 6px rgba(0,0,0,0.25);
+      justify-content:flex-start;
+      padding:7px 6px;
+      border:0;
+      border-right:1px solid rgba(69,65,56,0.14);
+      font-family:var(--mono);
+      font-size:9.5px;
+      letter-spacing:0.04em;
+      color:#f3f0e2;
       cursor:pointer;
-      transition:filter .12s ease;
       user-select:none;
+      overflow:hidden;
+      transition:flex-grow .25s ease;
     }
-    .swatch.dim{
-      color:var(--accent-2);
-      text-shadow:none;
-    }
+    .swatch:last-child{ border-right:0; }
+    .swatch span{ opacity:0; transition:opacity .2s ease; }
+    .swatch:hover{ flex-grow:2.2; }
+    .swatch:hover span, .swatch:focus-visible span{ opacity:1; }
+    .swatch.dim{ color:var(--ink); }
+
     .meta{
-      padding:12px 14px;
       display:flex;
-      align-items:center;
+      align-items:flex-end;
       justify-content:space-between;
-      gap:8px;
+      gap:10px;
+      padding:2px 4px 6px;
     }
-    .meta .name{
-      font-size:14px;
-      font-weight:600;
-      color:var(--accent);
+    .idx{
+      font-family:var(--mono);
+      font-size:10px;
+      letter-spacing:0.22em;
+      color:var(--ink-soft);
+      margin-bottom:6px;
+      transition:color .2s ease;
     }
-    .meta .info{
-      font-size:12px;
-      color:var(--muted);
+    .name{
+      font-size:15px;
+      font-weight:500;
+      letter-spacing:0.16em;
+      text-transform:uppercase;
+      word-break:break-word;
+    }
+    .info{
+      font-family:var(--mono);
+      font-size:11px;
+      letter-spacing:0.08em;
+      color:var(--ink-soft);
+      margin-top:4px;
+      transition:color .2s ease;
     }
 
+    .copy{
+      font-family:var(--sans);
+      font-size:10px;
+      font-weight:500;
+      letter-spacing:0.22em;
+      text-transform:uppercase;
+      background:transparent;
+      color:inherit;
+      border:1px solid currentColor;
+      padding:6px 10px;
+      margin-bottom:10px;
+      cursor:pointer;
+      transition:background .15s ease, color .15s ease;
+    }
+    .card .copy:hover{ background:var(--paper); color:var(--ink); border-color:var(--paper); }
+    .card:not(:hover) .copy:hover{ background:var(--ink); color:var(--paper); }
+
+    .state{
+      grid-column:1/-1;
+      padding:48px 16px;
+      border:1px dashed var(--line);
+      text-align:center;
+      font-family:var(--mono);
+      font-size:12px;
+      letter-spacing:0.08em;
+      line-height:1.8;
+      color:var(--ink-soft);
+      text-transform:none;
+    }
+    .state code{ background:var(--paper-3); color:var(--ink); padding:2px 6px; }
+
+    /* ---------- Aviso ---------- */
     .toast{
       position:fixed;
-      left:50%;
-      transform:translateX(-50%);
-      bottom:28px;
-      background:#111827;
-      color:white;
-      padding:10px 14px;
-      border-radius:10px;
-      font-size:13px;
+      left:32px; bottom:32px;
+      z-index:60;
+      background:var(--ink);
+      color:var(--paper);
+      padding:12px 20px 12px 16px;
+      font-family:var(--mono);
+      font-size:11px;
+      letter-spacing:0.2em;
+      text-transform:uppercase;
       opacity:0;
+      transform:translateX(-12px);
       pointer-events:none;
-      transition:opacity .18s ease, transform .18s ease;
+      transition:opacity .2s ease, transform .2s ease;
     }
-    .toast.show{opacity:1; transform:translateX(-50%) translateY(-6px); pointer-events:auto}
+    .toast::before{ content:"◆"; margin-right:12px; font-size:8px; vertical-align:middle; }
+    .toast.show{ opacity:1; transform:none; }
 
-    /* small screens adjustments */
-    @media (max-width:420px){
-      body{padding:24px 12px}
-      .swatches{height:72px}
+    @media (max-width:560px){
+      body{padding:32px 16px 72px}
+      header{flex-direction:column; align-items:flex-start}
+      .title{font-size:24px; letter-spacing:0.26em}
+      .toast{left:16px; bottom:16px}
     }
 
-    /* subtle focus styles for accessibility */
-    .btn:focus, .swatch:focus{
-      outline:3px solid rgba(99,102,241,0.14);
+    .btn:focus-visible, .swatch:focus-visible, .copy:focus-visible{
+      outline:2px solid var(--ink);
       outline-offset:3px;
     }
-
+    @media (prefers-reduced-motion:reduce){
+      .card{animation:none; opacity:1}
+      *{transition:none !important}
+    }
   </style>
 </head>
 <body>
   <div class="wrap" role="main">
     <header>
       <div>
-        <div class="title">Galería de paletas</div>
-        <div class="subtitle">Una presentación sobria y elegante de tus paletas de colores.</div>
+        <div class="eyebrow">Archivo // Colores</div>
+        <div class="title"><i></i>Paletas</div>
+        <div class="subtitle" id="subtitle">Cargando…</div>
       </div>
-
-      <div class="controls" aria-hidden="false">
-        <button id="loadJsonBtn" class="btn ghost" title="Cargar palettes.json si existe">Cargar palettes.json</button>
-        <button id="clearBtn" class="btn" title="Limpiar paletas de ejemplo">Limpiar</button>
+      <div class="controls">
+        <button id="reloadBtn" class="btn" title="Volver a leer la carpeta">Recargar</button>
       </div>
     </header>
 
     <main>
-      <section id="grid" class="grid" aria-live="polite">
-        <!-- cards rendered aquí -->
-      </section>
+      <section id="grid" class="grid" aria-live="polite"></section>
     </main>
   </div>
 
   <div id="toast" class="toast" role="status" aria-live="polite">Copiado</div>
 
   <script>
-    // Ejemplo de paletas — reemplaza o carga palettes.json
-    const samplePalettes = [
-      { name: "Noche Serena", colors: ["#0F172A","#1F2937","#4B5563","#9CA3AF","#F8FAFC"] },
-      { name: "Atardecer", colors: ["#3B0D12","#7B2A2A","#D97706","#F59E0B","#FDE68A"] },
-      { name: "Mar y Arena", colors: ["#032541","#075985","#0EA5A4","#7DD3FC","#FEF3C7"] },
-      { name: "Minimal", colors: ["#111827","#374151","#6B7280","#E5E7EB","#FFFFFF"] }
-    ];
+    /* ============================================================
+       CONFIGURACIÓN
+       ------------------------------------------------------------
+       folder : carpeta del repo que contiene los .json de paletas
+       owner / repo / branch : opcionales. Si se dejan vacíos y la
+         página está en GitHub Pages (usuario.github.io/repo) se
+         detectan solos. Branch vacío = rama por defecto del repo.
+       ============================================================ */
+    const CONFIG = {
+      folder: 'paletas',
+      owner: '',
+      repo: '',
+      branch: ''
+    };
 
     const grid = document.getElementById('grid');
     const toast = document.getElementById('toast');
+    const subtitle = document.getElementById('subtitle');
 
     function showToast(msg){
       toast.textContent = msg;
@@ -212,53 +332,184 @@
       toast._t = setTimeout(()=> toast.classList.remove('show'), 1700);
     }
 
-    function renderPalettes(palettes){
-      grid.innerHTML = '';
-      if(!palettes || palettes.length === 0){
-        grid.innerHTML = '<div style="grid-column:1/-1;padding:28px 12px;color:var(--muted);text-align:center">No hay paletas para mostrar.</div>';
+    function escapeHtml(str){
+      return String(str).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+    }
+
+    function setState(html){
+      grid.innerHTML = `<div class="state">${html}</div>`;
+    }
+
+    /* ---------- Colores ---------- */
+    const HEX_RE = /^#?([0-9a-f]{3}|[0-9a-f]{4}|[0-9a-f]{6}|[0-9a-f]{8})$/i;
+
+    function normalizeHex(v){
+      if (typeof v !== 'string') return null;
+      const s = v.trim();
+      if (!HEX_RE.test(s)) return null;
+      return (s.startsWith('#') ? s : '#' + s).toUpperCase();
+    }
+
+    function isColorLight(hex){
+      let c = hex.replace('#','');
+      if (c.length <= 4) c = c.split('').map(ch => ch + ch).join('');
+      const r = parseInt(c.substr(0,2),16);
+      const g = parseInt(c.substr(2,2),16);
+      const b = parseInt(c.substr(4,2),16);
+      return (0.2126*r + 0.7152*g + 0.0722*b) > 160;
+    }
+
+    /* Acepta varios formatos de JSON:
+       - { "name": "X", "colors": ["#fff", ...] }
+       - { "name": "X", "colors": [{ "hex": "#fff" }, ...] }
+       - ["#fff", "#000", ...]
+       - { "bg": "#111", "fg": "#eee", ... }  (clave -> color)  */
+    function extractColors(data){
+      let raw = [];
+      if (Array.isArray(data)) raw = data;
+      else if (data && typeof data === 'object'){
+        const list = data.colors || data.colores || data.palette || data.paleta;
+        if (Array.isArray(list)) raw = list;
+        else if (list && typeof list === 'object') raw = Object.values(list);
+        else raw = Object.values(data);
+      }
+      return raw
+        .map(c => (c && typeof c === 'object') ? (c.hex || c.color || c.value) : c)
+        .map(normalizeHex)
+        .filter(Boolean);
+    }
+
+    function extractName(data, filename){
+      const fallback = filename.replace(/\.json$/i, '');
+      if (data && !Array.isArray(data) && typeof data === 'object'){
+        const n = data.name || data.nombre || data.title;
+        if (typeof n === 'string' && n.trim()) return n.trim();
+      }
+      return fallback;
+    }
+
+    /* ---------- Listado de archivos de la carpeta ---------- */
+    function detectRepo(){
+      let { owner, repo } = CONFIG;
+      const host = location.hostname;
+      if ((!owner || !repo) && host.endsWith('.github.io')){
+        owner = owner || host.split('.')[0];
+        repo = repo || (location.pathname.split('/')[1] || host);
+      }
+      return { owner, repo };
+    }
+
+    async function listFiles(){
+      const folder = CONFIG.folder.replace(/^\/|\/$/g, '');
+
+      // 1) Manifiesto opcional: paletas/index.json -> ["a.json","b.json"]
+      try{
+        const res = await fetch(`${folder}/index.json`, {cache:'no-store'});
+        if (res.ok){
+          const list = await res.json();
+          if (Array.isArray(list)){
+            return list
+              .map(f => typeof f === 'string' ? f : f && f.file)
+              .filter(f => typeof f === 'string')
+              .map(f => f.endsWith('.json') ? f : f + '.json');
+          }
+        }
+      }catch(e){ /* sigue con la API */ }
+
+      // 2) API de GitHub: lista el contenido de la carpeta
+      const { owner, repo } = detectRepo();
+      if (!owner || !repo) throw new Error('NO_REPO');
+      const ref = CONFIG.branch ? `?ref=${encodeURIComponent(CONFIG.branch)}` : '';
+      const url = `https://api.github.com/repos/${owner}/${repo}/contents/${folder}${ref}`;
+      const res = await fetch(url, { headers:{ 'Accept':'application/vnd.github+json' } });
+      if (!res.ok) throw new Error('API_' + res.status);
+      const items = await res.json();
+      return items
+        .filter(i => i.type === 'file' && /\.json$/i.test(i.name) && i.name.toLowerCase() !== 'index.json')
+        .map(i => i.name);
+    }
+
+    async function loadPalettes(){
+      const folder = CONFIG.folder.replace(/^\/|\/$/g, '');
+      setState('Cargando datos…');
+      subtitle.textContent = 'Cargando…';
+
+      let files;
+      try{
+        files = await listFiles();
+      }catch(e){
+        subtitle.textContent = 'Error de lectura';
+        if (e.message === 'NO_REPO'){
+          setState(`No se pudo detectar el repositorio.<br>Completá <code>owner</code> y <code>repo</code> en <code>CONFIG</code>, o agregá <code>${escapeHtml(folder)}/index.json</code> con la lista de archivos.`);
+        } else {
+          setState(`No se pudo listar <code>${escapeHtml(folder)}/</code> (${escapeHtml(e.message)}).<br>Verificá el nombre de la carpeta y que el repositorio sea público.`);
+        }
         return;
       }
 
-      palettes.forEach(p => {
+      files.sort((a,b) => a.localeCompare(b, 'es', {numeric:true}));
+
+      const results = await Promise.all(files.map(async file => {
+        try{
+          const res = await fetch(`${folder}/${encodeURIComponent(file)}`, {cache:'no-store'});
+          if (!res.ok) throw new Error(res.status);
+          const data = await res.json();
+          const colors = extractColors(data);
+          if (!colors.length) return null;
+          return { name: extractName(data, file), colors };
+        }catch(e){
+          console.warn('Paleta omitida:', file, e);
+          return null;
+        }
+      }));
+
+      const palettes = results.filter(Boolean);
+      renderPalettes(palettes);
+      subtitle.textContent = palettes.length
+        ? `${String(palettes.length).padStart(2,'0')} entradas · /${folder}`
+        : `Sin entradas · /${folder}`;
+    }
+
+    /* ---------- Render ---------- */
+    function renderPalettes(palettes){
+      grid.innerHTML = '';
+      if (!palettes.length){
+        setState('No hay paletas para mostrar.');
+        return;
+      }
+
+      palettes.forEach((p, i) => {
         const card = document.createElement('article');
         card.className = 'card';
+        card.style.animationDelay = `${Math.min(i, 14) * 45}ms`;
         card.setAttribute('aria-label', `Paleta ${p.name}`);
 
         const swatches = document.createElement('div');
         swatches.className = 'swatches';
 
-        p.colors.forEach((c, idx) => {
+        p.colors.forEach(c => {
           const s = document.createElement('button');
-          s.className = 'swatch';
-          // si el color es muy claro, usar texto oscuro
-          const isLight = isColorLight(c);
-          if(isLight) s.classList.add('dim');
+          s.className = 'swatch' + (isColorLight(c) ? ' dim' : '');
           s.style.background = c;
-          s.innerHTML = `<span aria-hidden="true">${c.toUpperCase()}</span>`;
-          s.title = `Copiar ${c.toUpperCase()}`;
-          s.addEventListener('click', async () => {
-            try{
-              await navigator.clipboard.writeText(c.toUpperCase());
-              showToast(`${c.toUpperCase()} copiado`);
-            }catch(e){
-              showToast('No se pudo copiar');
-            }
-          });
-          s.addEventListener('keydown', (ev) => {
-            if(ev.key === 'Enter' || ev.key === ' ') { ev.preventDefault(); s.click(); }
-          });
+          s.innerHTML = `<span>${c}</span>`;
+          s.title = `Copiar ${c}`;
+          s.addEventListener('click', () => copyText(c, `${c} copiado`));
           swatches.appendChild(s);
         });
 
         const meta = document.createElement('div');
         meta.className = 'meta';
         meta.innerHTML = `<div>
-                            <div class="name">${escapeHtml(p.name)}</div>
-                            <div class="info">${p.colors.length} color${p.colors.length>1?'es':''}</div>
-                          </div>
-                          <div>
-                            <button class="btn" onclick="copyPalette(${encodeURIComponent(JSON.stringify(p.colors))})" title="Copiar colores">Copiar</button>
-                          </div>`;
+            <div class="idx">N.º ${String(i + 1).padStart(2,'0')}</div>
+            <div class="name">${escapeHtml(p.name)}</div>
+            <div class="info">${p.colors.length} color${p.colors.length>1?'es':''}</div>
+          </div>`;
+        const copyBtn = document.createElement('button');
+        copyBtn.className = 'copy';
+        copyBtn.textContent = 'Copiar';
+        copyBtn.title = 'Copiar todos los colores';
+        copyBtn.addEventListener('click', () => copyText(p.colors.join(', '), 'Paleta copiada'));
+        meta.appendChild(copyBtn);
 
         card.appendChild(swatches);
         card.appendChild(meta);
@@ -266,65 +517,17 @@
       });
     }
 
-    // función para copiar toda una paleta (como lista de hex)
-    async function copyPalette(colors){
-      const text = colors.join(', ').toUpperCase();
+    async function copyText(text, okMsg){
       try{
         await navigator.clipboard.writeText(text);
-        showToast('Paleta copiada');
+        showToast(okMsg);
       }catch(e){
         showToast('No se pudo copiar');
       }
     }
 
-    // heurística simple para decidir contraste del texto
-    function isColorLight(hex){
-      try{
-        const c = hex.replace('#','');
-        const r = parseInt(c.substr(0,2),16);
-        const g = parseInt(c.substr(2,2),16);
-        const b = parseInt(c.substr(4,2),16);
-        // luminance perceptual
-        const lum = 0.2126*r + 0.7152*g + 0.0722*b;
-        return lum > 180;
-      }catch(e){
-        return false;
-      }
-    }
-
-    // carga palettes.json si está disponible en la misma carpeta
-    async function loadPalettesJson(){
-      try{
-        const res = await fetch('./palettes.json', {cache:'no-store'});
-        if(!res.ok) throw new Error('no encontrado');
-        const data = await res.json();
-        if(Array.isArray(data)) {
-          renderPalettes(data);
-          showToast('palettes.json cargado');
-        } else {
-          showToast('Formato inválido en palettes.json');
-        }
-      }catch(e){
-        showToast('No se encontró palettes.json');
-      }
-    }
-
-    // escapado mínimo para evitar inyección en names
-    function escapeHtml(str){
-      return String(str).replace(/[&<>"']/g, function(m){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]; });
-    }
-
-    // botones de controles
-    document.getElementById('loadJsonBtn').addEventListener('click', loadPalettesJson);
-    document.getElementById('clearBtn').addEventListener('click', ()=> {
-      renderPalettes([]);
-    });
-
-    // render inicial con muestras
-    renderPalettes(samplePalettes);
-
-    // Exponer copyPalette para el onclick inline
-    window.copyPalette = copyPalette;
+    document.getElementById('reloadBtn').addEventListener('click', loadPalettes);
+    loadPalettes();
   </script>
 </body>
 </html>
